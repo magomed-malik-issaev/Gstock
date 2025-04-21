@@ -13,6 +13,7 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        if (!User::where('email', 'admin@gstock.com')->exists()) {
         User::create([
             'name' => 'Admin',
             'email' => 'admin@gstock.com',
@@ -22,5 +23,12 @@ class AdminUserSeeder extends Seeder
         ]);
 
         $this->command->info('Utilisateur administrateur créé avec succès !');
+    }else {
+        $this->command->info('L\'utilisateur administrateur existe déjà.');
     }
+    }
+    /**
+     * Reverse the database seeds.
+     */
+    
 }

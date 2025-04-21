@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import AdminLayout from './components/AdminLayout';
 import './App.css';
+import ProductsPage from './pages/ProductsPage';
 
 // Composant pour vérifier l'authentification
 function RequireAuth({ children }) {
@@ -46,7 +47,7 @@ function App() {
         >
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="products" element={<div>Page des produits (à implémenter)</div>} />
+          <Route path="products" element={<ProductsPage />} />
           <Route path="stocks" element={<div>Page de gestion des stocks (à implémenter)</div>} />
           <Route path="suppliers" element={<div>Page des fournisseurs (à implémenter)</div>} />
           <Route path="users" element={<div>Page des utilisateurs (à implémenter)</div>} />
