@@ -14,15 +14,6 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         try {
-            // Validation des paramètres de requête
-            $validated = $request->validate([
-                'category_id' => 'nullable|exists:categories,id',
-                'search' => 'nullable|string|max:255',
-                'sort_by' => 'nullable|string|in:name,purchase_price,selling_price,current_stock,created_at',
-                'sort_order' => 'nullable|string|in:asc,desc'
-            ]);
-
-            // Construction de la requête
             $query = Product::query();
 
             // Filtrage par catégorie
@@ -35,21 +26,21 @@ class ProductController extends Controller
                 $query->where('name', 'like', '%' . $request->search . '%');
             }
 
-            // Tri
-            if ($request->has('sort_by')) {
-                $query->orderBy($request->sort_by, $request->sort_order ?? 'asc');
-            }
-
-            // Récupération des produits
             $products = $query->with(['category', 'supplier'])->get();
+
+            // Ajout des URLs d'images complètes
+            $products->transform(function ($product) {
+                if ($product->image_path) {
+                    $product->image_url = asset('images/' . $product->image_path);
+                }
+                return $product;
+            });
 
             return response()->json([
                 'success' => true,
                 'data' => $products
             ]);
         } catch (\Exception $e) {
-            Log::error('Erreur lors de la récupération des produits: ' . $e->getMessage());
-
             return response()->json([
                 'success' => false,
                 'message' => 'Erreur lors de la récupération des produits',

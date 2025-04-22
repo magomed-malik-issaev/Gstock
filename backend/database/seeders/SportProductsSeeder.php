@@ -35,6 +35,26 @@ class SportProductsSeeder extends Seeder
             $supplierId = Supplier::first()->id;
         }
 
+        // Configuration des images pour les produits
+        $imageMapping = [
+            'Maillot de football équipe de France' => 'maillotequipedefrance.jpg',
+            'Short de running homme' => 'shortrunning.webp',
+            'Chaussures de running Nike Air Zoom' => 'nikeairzoom.jpg',
+            'Chaussures de football Adidas Predator' => 'predator.jpg',
+            'Ballon de football Adidas Champions League' => 'ballonchampionsleague.jpg',
+            'Ballon de basketball Spalding NBA' => 'ballonspaldingnba.jpg',
+            'Raquette de tennis Wilson Pro' => 'raquettewilsonpro.jpg',
+            'Set d\'haltères 10kg (paire)' => 'altere10kg.jpg',
+            'Tapis de yoga 6mm' => 'tapisyoga.webp',
+            'Lunettes de natation Speedo' => 'lunettenatationspeedo.webp',
+            'Ski Rossignol Experience 80' => 'skirossignol.jpg',
+            'Casque vélo route Giro' => 'casquevelogiro.jpg',
+            'Montre GPS Garmin Forerunner' => 'montregpsgarmin.webp',
+            'Protéine whey 1kg' => 'proteinewhey.jpg',
+            'Sac de sport Nike 45L' => 'sacsportnike.webp',
+            'Gourde isotherme 750ml' => 'gourdeisotherme.avif'
+        ];
+
         // Liste des produits par catégorie
         $products = [
             // Vêtements de sport
@@ -49,6 +69,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 5,
                 'category_id' => $categoryIds['Vêtements de sport'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Maillot de football équipe de France'] ?? null,
                 'is_active' => true
             ],
             [
@@ -62,6 +83,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 8,
                 'category_id' => $categoryIds['Vêtements de sport'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Short de running homme'] ?? null,
                 'is_active' => true
             ],
 
@@ -77,6 +99,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 3,
                 'category_id' => $categoryIds['Chaussures'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Chaussures de running Nike Air Zoom'] ?? null,
                 'is_active' => true
             ],
             [
@@ -90,6 +113,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 5,
                 'category_id' => $categoryIds['Chaussures'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Chaussures de football Adidas Predator'] ?? null,
                 'is_active' => true
             ],
 
@@ -105,6 +129,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 8,
                 'category_id' => $categoryIds['Sports collectifs'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Ballon de football Adidas Champions League'] ?? null,
                 'is_active' => true
             ],
             [
@@ -118,6 +143,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 6,
                 'category_id' => $categoryIds['Sports collectifs'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Ballon de basketball Spalding NBA'] ?? null,
                 'is_active' => true
             ],
 
@@ -133,6 +159,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 2,
                 'category_id' => $categoryIds['Sports de raquette'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Raquette de tennis Wilson Pro'] ?? null,
                 'is_active' => true
             ],
 
@@ -148,6 +175,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 3,
                 'category_id' => $categoryIds['Fitness et musculation'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Set d\'haltères 10kg (paire)'] ?? null,
                 'is_active' => true
             ],
             [
@@ -161,6 +189,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 7,
                 'category_id' => $categoryIds['Fitness et musculation'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Tapis de yoga 6mm'] ?? null,
                 'is_active' => true
             ],
 
@@ -176,6 +205,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 6,
                 'category_id' => $categoryIds['Sports aquatiques'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Lunettes de natation Speedo'] ?? null,
                 'is_active' => true
             ],
 
@@ -191,6 +221,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 2,
                 'category_id' => $categoryIds['Sports d\'hiver'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Ski Rossignol Experience 80'] ?? null,
                 'is_active' => true
             ],
 
@@ -206,6 +237,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 4,
                 'category_id' => $categoryIds['Cyclisme'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Casque vélo route Giro'] ?? null,
                 'is_active' => true
             ],
 
@@ -221,6 +253,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 2,
                 'category_id' => $categoryIds['Running'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Montre GPS Garmin Forerunner'] ?? null,
                 'is_active' => true
             ],
 
@@ -236,6 +269,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 8,
                 'category_id' => $categoryIds['Nutrition sportive'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Protéine whey 1kg'] ?? null,
                 'is_active' => true
             ],
 
@@ -251,6 +285,7 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 5,
                 'category_id' => $categoryIds['Accessoires'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Sac de sport Nike 45L'] ?? null,
                 'is_active' => true
             ],
             [
@@ -264,14 +299,29 @@ class SportProductsSeeder extends Seeder
                 'alert_threshold' => 10,
                 'category_id' => $categoryIds['Accessoires'] ?? null,
                 'supplier_id' => $supplierId,
+                'image_path' => $imageMapping['Gourde isotherme 750ml'] ?? null,
                 'is_active' => true
             ],
         ];
 
+        // Vérifier si les produits existent déjà (par SKU)
         foreach ($products as $productData) {
-            Product::create($productData);
+            $existingProduct = Product::where('sku', $productData['sku'])->first();
+
+            if ($existingProduct) {
+                // Mise à jour du chemin d'image uniquement
+                if (isset($productData['image_path']) && $productData['image_path']) {
+                    $existingProduct->image_path = $productData['image_path'];
+                    $existingProduct->save();
+                    $this->command->info("Image mise à jour pour {$existingProduct->name}");
+                }
+            } else {
+                // Création d'un nouveau produit
+                Product::create($productData);
+                $this->command->info("Produit créé: {$productData['name']}");
+            }
         }
 
-        $this->command->info('Produits de sport créés avec succès !');
+        $this->command->info('Produits de sport créés/mis à jour avec succès !');
     }
 }
