@@ -1,40 +1,47 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
+import { MantineProvider, createTheme } from '@mantine/core'
+import '@mantine/core/styles.css'
 import './index.css'
 import App from './App.jsx'
 
-// Création d'un thème personnalisé avec orange comme couleur principale
+// Création d'un thème personnalisé avec Mantine
 const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#ff9800', // Orange principal
-      dark: '#ed6c02', // Orange foncé
-      light: '#ffb74d', // Orange clair
-    },
-    secondary: {
-      main: '#f50057', // Rose/rouge pour les actions secondaires
-    },
-    background: {
-      default: '#f5f5f5', // Fond gris clair
-    },
+  colors: {
+    brand: [
+      '#fff0e0', // 0
+      '#ffe0c0', // 1
+      '#ffd0a0', // 2
+      '#ffc080', // 3
+      '#ffb060', // 4
+      '#ffa040', // 5
+      '#ff9000', // 6 - Orange principal
+      '#e07000', // 7
+      '#c06000', // 8
+      '#a05000', // 9
+    ],
+    secondary: [
+      '#ffe0e8', // 0
+      '#ffc0d0', // 1
+      '#ffa0b8', // 2
+      '#ff80a0', // 3
+      '#ff6088', // 4
+      '#ff4070', // 5
+      '#ff2058', // 6 - Rose/rouge pour les actions secondaires
+      '#d01040', // 7
+      '#b00020', // 8
+      '#900008', // 9
+    ],
   },
-  typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    h3: {
-      fontWeight: 600,
-    },
-    h6: {
-      fontWeight: 500,
-    },
-  },
+  primaryColor: 'brand',
+  fontFamily: 'Roboto, sans-serif',
+  defaultRadius: 'md',
 });
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline /> {/* Reset CSS pour une apparence cohérente */}
+    <MantineProvider theme={theme}>
       <App />
-    </ThemeProvider>
+    </MantineProvider>
   </StrictMode>,
 )

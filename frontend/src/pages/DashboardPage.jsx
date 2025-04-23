@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Box,
+    Container,
     Grid,
     Paper,
-    Typography,
+    Text,
     Card,
-    CardContent,
     Avatar,
-    LinearProgress,
+    Progress,
     Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
     Button,
-    Container
-} from '@mui/material';
+    Group,
+    Box,
+    Title,
+    Stack,
+    ActionIcon,
+    Badge,
+    rem
+} from '@mantine/core';
 import {
-    Inventory as InventoryIcon,
-    LocalShipping as SupplierIcon,
-    Group as UserIcon,
-    Warning as AlertIcon,
-    TrendingUp as TrendingUpIcon,
-    TrendingDown as TrendingDownIcon
-} from '@mui/icons-material';
+    IconPackage,
+    IconTruck,
+    IconUsers,
+    IconAlertCircle,
+    IconArrowUpRight,
+    IconArrowDownRight,
+    IconEye
+} from '@tabler/icons-react';
 
 // Données fictives pour la démo
 const recentMovements = [
@@ -61,222 +62,185 @@ function DashboardPage() {
         return () => clearTimeout(timer);
     }, []);
 
+    // Statistiques cards
+    const statCards = [
+        {
+            title: "Produits",
+            value: stats.totalProducts,
+            icon: <IconPackage size={24} />,
+            color: "brand",
+            progress: 70,
+            description: "70% de capacité utilisée"
+        },
+        {
+            title: "Fournisseurs",
+            value: stats.totalSuppliers,
+            icon: <IconTruck size={24} />,
+            color: "teal",
+            progress: 50,
+            description: "3 commandes en cours"
+        },
+        {
+            title: "Utilisateurs",
+            value: stats.totalUsers,
+            icon: <IconUsers size={24} />,
+            color: "blue",
+            progress: 30,
+            description: "4 utilisateurs actifs"
+        },
+        {
+            title: "Alertes",
+            value: stats.lowStockAlerts,
+            icon: <IconAlertCircle size={24} />,
+            color: "red",
+            hasButton: true,
+            buttonText: "Voir les alertes →"
+        }
+    ];
+
+    const rows = recentMovements.map((movement) => (
+        <Table.Tr key={movement.id}>
+            <Table.Td fw={500}>{movement.productName}</Table.Td>
+            <Table.Td>
+                <Group gap="xs">
+                    {movement.type === 'entrée' ? (
+                        <>
+                            <IconArrowUpRight size={16} color="teal" stroke={1.5} />
+                            <Text>entrée</Text>
+                        </>
+                    ) : (
+                        <>
+                            <IconArrowDownRight size={16} color="red" stroke={1.5} />
+                            <Text>sortie</Text>
+                        </>
+                    )}
+                </Group>
+            </Table.Td>
+            <Table.Td ta="right">{movement.quantity}</Table.Td>
+            <Table.Td>{movement.date}</Table.Td>
+            <Table.Td>{movement.user}</Table.Td>
+            <Table.Td ta="right">
+                <Button variant="outline" size="xs" leftSection={<IconEye size={14} />}>
+                    Détails
+                </Button>
+            </Table.Td>
+        </Table.Tr>
+    ));
+
     return (
-        <Container maxWidth="xl" sx={{ p: 3 }}>
-            {/* Rangée de 4 cartes de statistiques avec plus d'espacement */}
-            <Grid container spacing={12} sx={{ mb: 5 }}>
-                {/* Carte Produits */}
-                <Grid item xs={12} sm={6} md={3}>
-                    <Card sx={{ borderRadius: 2, boxShadow: 3, height: '100%' }}>
-                        <CardContent sx={{ p: 3 }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                                <Typography variant="h6" color="text.secondary">
-                                    Produits
-                                </Typography>
-                                <Avatar sx={{ bgcolor: 'primary.main', width: 48, height: 48 }}>
-                                    <InventoryIcon />
+        <Container size="xl" py="md">
+            {/* Rangée de 4 cartes de statistiques */}
+            <Grid gutter="xl" mb="xl">
+                {statCards.map((stat, index) => (
+                    <Grid.Col key={index} span={{ base: 12, sm: 6, md: 3 }}>
+                        <Card shadow="sm" padding="md" radius="md" withBorder h="100%">
+                            <Group justify="space-between" mb="md">
+                                <Text size="lg" c="dimmed" fw={500}>
+                                    {stat.title}
+                                </Text>
+                                <Avatar
+                                    color={stat.color}
+                                    radius="xl"
+                                    size="md"
+                                >
+                                    {stat.icon}
                                 </Avatar>
-                            </Box>
-                            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                {stats.totalProducts}
-                            </Typography>
-                            <LinearProgress
-                                variant="determinate"
-                                value={70}
-                                sx={{ height: 8, borderRadius: 4, mb: 1 }}
-                            />
-                            <Typography variant="body2" color="text.secondary">
-                                70% de capacité utilisée
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                {/* Carte Fournisseurs */}
-                <Grid item xs={12} sm={6} md={3}>
-                    <Card sx={{ borderRadius: 2, boxShadow: 3, height: '100%' }}>
-                        <CardContent sx={{ p: 3 }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                                <Typography variant="h6" color="text.secondary">
-                                    Fournisseurs
-                                </Typography>
-                                <Avatar sx={{ bgcolor: 'success.main', width: 48, height: 48 }}>
-                                    <SupplierIcon />
-                                </Avatar>
-                            </Box>
-                            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                {stats.totalSuppliers}
-                            </Typography>
-                            <LinearProgress
-                                variant="determinate"
-                                value={50}
-                                sx={{ height: 8, borderRadius: 4, mb: 1 }}
-                                color="success"
-                            />
-                            <Typography variant="body2" color="text.secondary">
-                                3 commandes en cours
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                {/* Carte Utilisateurs */}
-                <Grid item xs={12} sm={6} md={3}>
-                    <Card sx={{ borderRadius: 2, boxShadow: 3, height: '100%' }}>
-                        <CardContent sx={{ p: 3 }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                                <Typography variant="h6" color="text.secondary">
-                                    Utilisateurs
-                                </Typography>
-                                <Avatar sx={{ bgcolor: 'info.main', width: 48, height: 48 }}>
-                                    <UserIcon />
-                                </Avatar>
-                            </Box>
-                            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                {stats.totalUsers}
-                            </Typography>
-                            <LinearProgress
-                                variant="determinate"
-                                value={30}
-                                sx={{ height: 8, borderRadius: 4, mb: 1 }}
-                                color="info"
-                            />
-                            <Typography variant="body2" color="text.secondary">
-                                4 utilisateurs actifs
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-
-                {/* Carte Alertes */}
-                <Grid item xs={12} sm={6} md={3}>
-                    <Card sx={{ borderRadius: 2, boxShadow: 3, height: '100%' }}>
-                        <CardContent sx={{ p: 3 }}>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                                <Typography variant="h6" color="text.secondary">
-                                    Alertes
-                                </Typography>
-                                <Avatar sx={{ bgcolor: 'error.main', width: 48, height: 48 }}>
-                                    <AlertIcon />
-                                </Avatar>
-                            </Box>
-                            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                {stats.lowStockAlerts}
-                            </Typography>
-                            <Button
-                                variant="text"
-                                color="error"
-                                sx={{ p: 0, fontWeight: 'medium' }}
-                            >
-                                Voir les alertes →
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </Grid>
+                            </Group>
+                            <Title order={2} fw={700} mb="xs">
+                                {stat.value}
+                            </Title>
+                            {stat.progress && (
+                                <>
+                                    <Progress
+                                        value={stat.progress}
+                                        color={stat.color}
+                                        size="md"
+                                        radius="xl"
+                                        mb="xs"
+                                    />
+                                    <Text size="sm" c="dimmed">
+                                        {stat.description}
+                                    </Text>
+                                </>
+                            )}
+                            {stat.hasButton && (
+                                <Button
+                                    variant="subtle"
+                                    color={stat.color}
+                                    px={0}
+                                    mt="md"
+                                >
+                                    {stat.buttonText}
+                                </Button>
+                            )}
+                        </Card>
+                    </Grid.Col>
+                ))}
             </Grid>
 
-            {/* Grande section graphique - deuxième rangée, plus large */}
+            {/* Grande section graphique */}
             <Paper
-                sx={{
-                    p: 4,
-                    mb: 5,
-                    borderRadius: 2,
-                    boxShadow: 3,
-                    width: '100%',
-                    height: '350px', // Hauteur augmentée
-                    display: 'flex',
-                    flexDirection: 'column',
-                    margin: ''
-                }}
+                shadow="sm"
+                radius="md"
+                p="lg"
+                withBorder
+                mb="xl"
+                h={350}
             >
-                <Typography variant="h6" sx={{ mb: 3, fontWeight: 'bold', fontSize: '1.25rem' }}>
+                <Title order={3} mb="md">
                     Activité du stock
-                </Typography>
+                </Title>
 
-                {/* Emplacement pour un futur graphique */}
                 <Box
-                    sx={{
+                    style={{
                         flexGrow: 1,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        bgcolor: 'action.hover',
-                        borderRadius: 1
+                        backgroundColor: '#f8f9fa',
+                        borderRadius: rem(4),
+                        height: '85%'
                     }}
                 >
-                    <Typography color="text.secondary">
+                    <Text c="dimmed">
                         Graphique d'activité du stock (à implémenter)
-                    </Typography>
+                    </Text>
                 </Box>
             </Paper>
 
-            {/* Grande section tableau - troisième rangée, plus large */}
+            {/* Grande section tableau */}
             <Paper
-                sx={{
-                    borderRadius: 2,
-                    boxShadow: 3,
-                    overflow: 'hidden',
-                    width: '100%'
-                }}
+                shadow="sm"
+                radius="md"
+                withBorder
+                style={{ overflow: 'hidden' }}
             >
-                <Box
-                    sx={{
-                        p: 4,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        borderBottom: '1px solid rgba(0,0,0,0.05)'
-                    }}
-                >
-                    <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1.25rem' }}>
-                        Mouvements récents
-                    </Typography>
-                    <Button variant="outlined">
-                        Voir tous les mouvements
-                    </Button>
+                <Box py="md" px="lg" style={{ borderBottom: '1px solid #e9ecef' }}>
+                    <Group justify="space-between">
+                        <Title order={3}>
+                            Mouvements récents
+                        </Title>
+                        <Button variant="outline">
+                            Voir tous les mouvements
+                        </Button>
+                    </Group>
                 </Box>
 
-                <TableContainer sx={{ maxHeight: '450px' }}>
-                    <Table stickyHeader>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem', p: 2 }}>Produit</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem', p: 2 }}>Type</TableCell>
-                                <TableCell align="right" sx={{ fontWeight: 'bold', fontSize: '1rem', p: 2 }}>Quantité</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem', p: 2 }}>Date</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem', p: 2 }}>Utilisateur</TableCell>
-                                <TableCell align="right" sx={{ fontWeight: 'bold', fontSize: '1rem', p: 2 }}>Actions</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {recentMovements.map((movement) => (
-                                <TableRow key={movement.id} hover>
-                                    <TableCell sx={{ fontWeight: 'medium', p: 2 }}>
-                                        {movement.productName}
-                                    </TableCell>
-                                    <TableCell sx={{ p: 2 }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            {movement.type === 'entrée' ? (
-                                                <TrendingUpIcon color="success" fontSize="small" sx={{ mr: 0.5 }} />
-                                            ) : (
-                                                <TrendingDownIcon color="error" fontSize="small" sx={{ mr: 0.5 }} />
-                                            )}
-                                            {movement.type}
-                                        </Box>
-                                    </TableCell>
-                                    <TableCell align="right" sx={{ p: 2 }}>{movement.quantity}</TableCell>
-                                    <TableCell sx={{ p: 2 }}>{movement.date}</TableCell>
-                                    <TableCell sx={{ p: 2 }}>{movement.user}</TableCell>
-                                    <TableCell align="right" sx={{ p: 2 }}>
-                                        <Button size="small" variant="outlined">
-                                            Détails
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
+                <Box style={{ maxHeight: '450px', overflow: 'auto' }}>
+                    <Table striped highlightOnHover withTableBorder>
+                        <Table.Thead style={{ position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1 }}>
+                            <Table.Tr>
+                                <Table.Th>Produit</Table.Th>
+                                <Table.Th>Type</Table.Th>
+                                <Table.Th ta="right">Quantité</Table.Th>
+                                <Table.Th>Date</Table.Th>
+                                <Table.Th>Utilisateur</Table.Th>
+                                <Table.Th ta="right">Actions</Table.Th>
+                            </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>{rows}</Table.Tbody>
                     </Table>
-                </TableContainer>
+                </Box>
             </Paper>
         </Container>
     );

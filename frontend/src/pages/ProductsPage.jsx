@@ -2,23 +2,22 @@
 import React, { useState, useEffect } from 'react';
 import {
     Container,
-    Typography,
-    Box,
+    Title,
+    Text,
     Grid,
     Card,
-    CardContent,
-    CardMedia,
-    CardActionArea,
-    FormControl,
-    InputLabel,
+    Image,
+    Badge,
+    Group,
     Select,
-    MenuItem,
-    Chip,
+    Box,
     Divider,
-    CircularProgress,
     Alert,
-    Paper
-} from '@mui/material';
+    Loader,
+    Stack,
+    Center
+} from '@mantine/core';
+import { IconInfoCircle, IconAlertTriangle } from '@tabler/icons-react';
 import api from '../services/api';
 
 // Import des images
@@ -67,7 +66,7 @@ const getProductImage = (product) => {
     }
 
     // Si le nom ne correspond pas exactement, essayer de trouver une correspondance partielle
-    const productNameLower = product.name.toLowerCase();
+    const productNameLower = product.name?.toLowerCase() || '';
     for (const [key, image] of Object.entries(productImages)) {
         if (productNameLower.includes(key.toLowerCase())) {
             return image;
@@ -76,60 +75,6 @@ const getProductImage = (product) => {
 
     // Image par défaut si aucune correspondance
     return "https://via.placeholder.com/300x180?text=Produit";
-};
-
-// Styles pour les cartes de produits
-const cardStyles = {
-    card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        transition: 'transform 0.2s, box-shadow 0.2s',
-        '&:hover': {
-            transform: 'translateY(-5px)',
-            boxShadow: 6
-        },
-        borderRadius: 2,
-        overflow: 'hidden'
-    },
-    mediaContainer: {
-        height: 200,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f5f5f5',
-        overflow: 'hidden'
-    },
-    media: {
-        maxHeight: '100%',
-        maxWidth: '100%',
-        objectFit: 'contain',
-        padding: 1
-    },
-    contentArea: {
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginBottom: 1
-    },
-    name: {
-        fontWeight: 600,
-        fontSize: '1rem',
-        lineHeight: 1.2,
-        flexGrow: 1,
-        marginRight: 1
-    },
-    price: {
-        fontWeight: 'bold'
-    },
-    stockInfo: {
-        marginTop: 'auto'
-    }
 };
 
 function ProductsPage() {
@@ -189,120 +134,117 @@ function ProductsPage() {
     }, [selectedCategory]);
 
     // Gestion du changement de catégorie
-    const handleCategoryChange = (event) => {
-        setSelectedCategory(event.target.value);
+    const handleCategoryChange = (value) => {
+        setSelectedCategory(value);
     };
 
     // Trouver le nom de la catégorie sélectionnée
     const getSelectedCategoryName = () => {
         if (!selectedCategory) return 'Tous les produits';
-        const category = categories.find(cat => cat.id === selectedCategory);
+        const category = categories.find(cat => cat.id === parseInt(selectedCategory));
         return category ? category.name : '';
     };
 
+    // Options pour le sélecteur de catégories
+    const categoryOptions = categories.map(category => ({
+        value: category.id.toString(),
+        label: category.name
+    }));
+
     return (
-        <Container maxWidth="xl" sx={{ py: 4 }}>
-            <Box sx={{ mb: 4 }}>
-                <Typography variant="h4" component="h1" gutterBottom>
-                    Produits
-                </Typography>
-                <Typography variant="body1" color="text.secondary" paragraph>
+        <Container size="xl" py="md">
+            {/* En-tête */}
+            <Box mb="lg">
+                <Title order={1} mb="xs">Produits</Title>
+                <Text c="dimmed">
                     Parcourez notre catalogue de produits et filtrez par catégorie
-                </Typography>
+                </Text>
             </Box>
 
             {/* Sélection de catégorie */}
-            <Box sx={{ mb: 4 }}>
-                <FormControl fullWidth variant="outlined" sx={{ maxWidth: 300 }}>
-                    <InputLabel id="category-select-label">Filtrer par catégorie</InputLabel>
-                    <Select
-                        labelId="category-select-label"
-                        id="category-select"
-                        value={selectedCategory}
-                        onChange={handleCategoryChange}
-                        label="Filtrer par catégorie"
-                    >
-                        <MenuItem value="">Toutes les catégories</MenuItem>
-                        {categories.map(category => (
-                            <MenuItem key={category.id} value={category.id}>
-                                {category.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+            <Box mb="lg" maw={300}>
+                <Select
+                    label="Filtrer par catégorie"
+                    placeholder="Toutes les catégories"
+                    data={[{ value: '', label: 'Toutes les catégories' }, ...categoryOptions]}
+                    value={selectedCategory}
+                    onChange={handleCategoryChange}
+                    clearable={false}
+                />
             </Box>
 
             {/* Affichage de la catégorie sélectionnée */}
-            <Box sx={{ mb: 3 }}>
-                <Typography variant="h5" component="h2">
-                    {getSelectedCategoryName()}
-                </Typography>
-                <Divider sx={{ mt: 1, mb: 3 }} />
+            <Box mb="md">
+                <Title order={2}>{getSelectedCategoryName()}</Title>
+                <Divider my="sm" />
             </Box>
 
             {/* Affichage des erreurs */}
             {error && (
-                <Alert severity="error" sx={{ mb: 3 }}>
+                <Alert
+                    title="Erreur"
+                    color="red"
+                    icon={<IconAlertTriangle />}
+                    mb="md"
+                >
                     {error}
                 </Alert>
             )}
 
             {/* Indicateur de chargement */}
             {loading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
-                    <CircularProgress />
-                </Box>
+                <Center my="xl">
+                    <Loader size="lg" color="brand" />
+                </Center>
             ) : (
                 <>
                     {/* Grille de produits */}
                     {products.length > 0 ? (
-                        <Grid container spacing={3}>
+                        <Grid>
                             {products.map(product => (
-                                <Grid item key={product.id} xs={12} sm={6} md={3} lg={3}>
-                                    <Paper elevation={2} sx={cardStyles.card}>
-                                        {/* Image du produit */}
-                                        <Box sx={cardStyles.mediaContainer}>
-                                            <CardMedia
-                                                component="img"
-                                                image={getProductImage(product)}
+                                <Grid.Col key={product.id} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
+                                    <Card shadow="sm" padding="md" radius="md" withBorder>
+                                        <Card.Section>
+                                            <Image
+                                                src={getProductImage(product)}
+                                                height={200}
+                                                fit="contain"
+                                                bg="gray.0"
+                                                p="md"
                                                 alt={product.name}
-                                                sx={cardStyles.media}
                                             />
-                                        </Box>
+                                        </Card.Section>
 
-                                        {/* Contenu de la carte */}
-                                        <CardContent sx={cardStyles.contentArea}>
-                                            <Box sx={cardStyles.header}>
-                                                <Typography variant="subtitle1" component="h3" sx={cardStyles.name}>
-                                                    {product.name}
-                                                </Typography>
-                                                <Chip
-                                                    label={`${product.selling_price} €`}
-                                                    color="primary"
-                                                    size="small"
-                                                    sx={cardStyles.price}
-                                                />
-                                            </Box>
+                                        <Stack mt="md" gap="sm">
+                                            <Group justify="space-between" align="flex-start">
+                                                <Text fw={600} lineClamp={2}>{product.name}</Text>
+                                                <Badge color="brand" size="lg" variant="filled">
+                                                    {product.selling_price} €
+                                                </Badge>
+                                            </Group>
 
-                                            <Box sx={cardStyles.stockInfo}>
-                                                <Typography variant="body2" color="text.secondary">
+                                            <Group gap="xs">
+                                                <Text size="sm" c="dimmed">
                                                     Stock: {product.current_stock} unités
-                                                </Typography>
-                                                <Typography variant="caption" color="text.secondary" display="block">
-                                                    Seuil d'alerte: {product.alert_threshold} unités
-                                                </Typography>
-                                            </Box>
-                                        </CardContent>
-                                    </Paper>
-                                </Grid>
+                                                </Text>
+                                            </Group>
+
+                                            <Text size="xs" c="dimmed">
+                                                Seuil d'alerte: {product.alert_threshold} unités
+                                            </Text>
+                                        </Stack>
+                                    </Card>
+                                </Grid.Col>
                             ))}
                         </Grid>
                     ) : (
-                        <Box sx={{ textAlign: 'center', my: 4 }}>
-                            <Typography variant="h6" color="text.secondary">
-                                Aucun produit trouvé pour cette catégorie
-                            </Typography>
-                        </Box>
+                        <Center my="xl" py="xl" bg="gray.0" style={{ borderRadius: 8 }}>
+                            <Stack align="center">
+                                <IconInfoCircle size={48} color="gray" />
+                                <Title order={3} c="gray.7">Aucun produit trouvé</Title>
+                                <Text c="dimmed">Aucun produit disponible pour cette catégorie.</Text>
+                            </Stack>
+                        </Center>
                     )}
                 </>
             )}
