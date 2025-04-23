@@ -61,15 +61,47 @@ const productImages = {
 
 // Fonction pour obtenir l'image correspondante ou une image par défaut
 const getProductImage = (product) => {
+    // 1. Correspondance directe avec le nom exact
     if (productImages[product.name]) {
         return productImages[product.name];
     }
 
-    // Si le nom ne correspond pas exactement, essayer de trouver une correspondance partielle
-    const productNameLower = product.name?.toLowerCase() || '';
+    // 2. Correspondance avec le nom en minuscules sans espaces
+    const productNameLower = product.name?.toLowerCase().replace(/\s+/g, '') || '';
     for (const [key, image] of Object.entries(productImages)) {
-        if (productNameLower.includes(key.toLowerCase())) {
+        const keyLower = key.toLowerCase().replace(/\s+/g, '');
+        if (productNameLower.includes(keyLower) || keyLower.includes(productNameLower)) {
             return image;
+        }
+    }
+
+    // 3. Recherche de mots-clés dans le nom du produit
+    const keywords = [
+        { key: "maillot", img: maillotequipedefrance },
+        { key: "france", img: maillotequipedefrance },
+        { key: "short", img: shortrunning },
+        { key: "running", img: shortrunning },
+        { key: "chaussures", img: nikeairzoom },
+        { key: "zoom", img: nikeairzoom },
+        { key: "predator", img: predator },
+        { key: "adidas", img: predator },
+        { key: "ballon", img: ballonchampionsleague },
+        { key: "champions", img: ballonchampionsleague },
+        { key: "basketball", img: ballonspaldingnba },
+        { key: "tennis", img: raquettewilsonpro },
+        { key: "raquette", img: raquettewilsonpro },
+        { key: "haltère", img: altere10kg },
+        { key: "altère", img: altere10kg },
+        { key: "gourde", img: gourdeisotherme },
+        { key: "sac", img: sacsportnike },
+        { key: "tapis", img: tapisyoga },
+        { key: "casque", img: casquevelogiro },
+        { key: "lunette", img: lunettenatationspeedo },
+    ];
+
+    for (const { key, img } of keywords) {
+        if (productNameLower.includes(key.toLowerCase())) {
+            return img;
         }
     }
 
