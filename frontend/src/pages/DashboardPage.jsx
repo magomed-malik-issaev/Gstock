@@ -46,11 +46,11 @@ function DashboardPage() {
         lowStockAlerts: 7
     });
 
-    // Pour une application réelle, vous feriez des appels API ici
+    // Pour une application réelle, vous feriez des appels  ici
     useEffect(() => {
         // Simuler un chargement des données
         const timer = setTimeout(() => {
-            // Mise à jour des statistiques (dans un vrai cas, cela viendrait d'une API)
+            // Mise à jour des statistiques (dans un vrai cas, cela viendrait d'une )
             setStats({
                 totalProducts: 248,
                 totalSuppliers: 36,

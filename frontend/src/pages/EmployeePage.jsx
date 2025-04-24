@@ -36,7 +36,7 @@ import {
     IconPlus,
     IconFilter
 } from '@tabler/icons-react';
-import api from '../services/api';
+import  from '../services/';
 
 // Import des images (réutiliser celles de ProductsPage)
 import gourdeisotherme from '../assets/images/gourdeisotherme.avif';
@@ -46,7 +46,7 @@ import montregpsgarmin from '../assets/images/montregpsgarmin.webp';
 import casquevelogiro from '../assets/images/casquevelogiro.jpg';
 import skirossignol from '../assets/images/skirossignol.jpg';
 import lunettenatationspeedo from '../assets/images/lunettenatationspeedo.webp';
-import tapisyoga from '../assets/images/tapisyoga.webp';
+import tsyoga from '../assets/images/tsyoga.webp';
 import altere10kg from '../assets/images/altère10kg.jpg';
 import raquettewilsonpro from '../assets/images/raquettewilsonpro.jpg';
 import ballonspaldingnba from '../assets/images/ballonspaldingnba.jpg';
@@ -65,7 +65,7 @@ const productImages = {
     'Casque vélo Giro': casquevelogiro,
     'Ski Rossignol': skirossignol,
     'Lunette natation Speedo': lunettenatationspeedo,
-    'Tapis de yoga': tapisyoga,
+    'Ts de yoga': tsyoga,
     'Altères 10kg': altere10kg,
     'Raquette Wilson Pro': raquettewilsonpro,
     'Ballon Spalding NBA': ballonspaldingnba,
@@ -111,7 +111,7 @@ const getProductImage = (product) => {
         { key: "altère", img: altere10kg },
         { key: "gourde", img: gourdeisotherme },
         { key: "sac", img: sacsportnike },
-        { key: "tapis", img: tapisyoga },
+        { key: "ts", img: tsyoga },
         { key: "casque", img: casquevelogiro },
         { key: "lunette", img: lunettenatationspeedo },
     ];
@@ -158,13 +158,13 @@ function EmployeePage() {
                 setLoading(true);
 
                 // Charger les catégories
-                const categoriesResponse = await api.get('/categories');
+                const categoriesResponse = await .get('/categories');
                 if (categoriesResponse.data && categoriesResponse.data.success) {
                     setCategories(categoriesResponse.data.data);
                 }
 
                 // Charger les produits
-                const productsResponse = await api.get('/products');
+                const productsResponse = await .get('/products');
                 if (productsResponse.data && productsResponse.data.success) {
                     setProducts(productsResponse.data.data);
                     setFilteredProducts(productsResponse.data.data);
@@ -260,7 +260,7 @@ function EmployeePage() {
         close();
 
         // Dans une application réelle, il faudrait également envoyer ces données au serveur
-        // api.post('/stock-movements', { product_id: selectedProduct.id, type: movementType, quantity: movementQuantity });
+        // .post('/stock-movements', { product_id: selectedProduct.id, type: movementType, quantity: movementQuantity });
     };
 
     // Formatage du statut de stock avec badges

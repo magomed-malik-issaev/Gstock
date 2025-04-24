@@ -5,6 +5,7 @@ import DashboardPage from './pages/DashboardPage';
 import AdminLayout from './components/AdminLayout';
 import './App.css';
 import ProductsPage from './pages/ProductsPage';
+import UsersPage from './pages/UsersPage';
 
 // Composant pour vérifier l'authentification
 function RequireAuth({ children }) {
@@ -50,7 +51,7 @@ function App() {
           <Route path="products" element={<ProductsPage />} />
           <Route path="stocks" element={<div>Page de gestion des stocks (à implémenter)</div>} />
           <Route path="suppliers" element={<div>Page des fournisseurs (à implémenter)</div>} />
-          <Route path="users" element={<div>Page des utilisateurs (à implémenter)</div>} />
+          <Route path="users" element={<UsersPage />} />
           <Route path="alerts" element={<div>Page des alertes (à implémenter)</div>} />
           <Route path="reports" element={<div>Page des rapports (à implémenter)</div>} />
           <Route path="settings" element={<div>Page des paramètres (à implémenter)</div>} />
